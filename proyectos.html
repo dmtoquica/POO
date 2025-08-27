@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Proyectos Finales - POO</title>
+    
+    <!-- Chosen Palette: Warm Neutrals -->
+    <!-- Application Structure Plan: A single-page app using a sticky top navigation bar for smooth scrolling to dedicated sections for each project and a new registration section. This provides easy navigation and a clear overview. The core interaction is now the project registration via an embedded form. -->
+    <!-- Visualization & Content Choices: Report Info: Project details and registration form -> Goal: Inform and Register -> Viz/Presentation Method: Thematic sections for project details and an embedded iframe for the registration form. -> Interaction: Form submission. -> Justification: Integrates the registration process directly into the project information page for a seamless user experience. -> Library/Method: Vanilla JS for navigation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #404040;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #D97706; /* amber-600 */
+            border-bottom-color: #D97706;
+        }
+        .form-container {
+            position: relative;
+            width: 100%;
+            padding-top: 75%; /* Aspect ratio 4:3 */
+            height: 0;
+            overflow: hidden;
+        }
+        .form-container iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+
+        <header class="text-center py-12 md:py-16">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-amber-900 tracking-tight">Proyectos Finales de POO</h1>
+            <p class="mt-4 max-w-3xl mx-auto text-lg text-gray-600">Explora, compara y elige el reto que definirá tu semestre. Cada proyecto está diseñado para aplicar y dominar los conceptos clave de la Programación Orientada a Objetos.</p>
+        </header>
+
+        <nav id="navbar" class="sticky top-0 z-10 bg-[#FDFBF8]/80 backdrop-blur-md border-b border-gray-200 mb-12">
+            <div class="flex justify-center items-center space-x-4 sm:space-x-8 py-3">
+                <a href="#project1" class="nav-link font-semibold px-2 py-2 text-sm sm:text-base">Proyecto 1</a>
+                <a href="#project2" class="nav-link font-semibold px-2 py-2 text-sm sm:text-base">Proyecto 2</a>
+                <a href="#project3" class="nav-link font-semibold px-2 py-2 text-sm sm:text-base">Proyecto 3</a>
+                <a href="#project4" class="nav-link font-semibold px-2 py-2 text-sm sm:text-base">Proyecto 4</a>
+                <a href="#registration" class="nav-link font-semibold px-2 py-2 text-sm sm:text-base">Registro</a>
+            </div>
+        </nav>
+
+        <main class="space-y-20">
+            <section id="project1" class="scroll-mt-24">
+                <div class="p-8 bg-white rounded-2xl shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-bold text-amber-800">Proyecto 1: Sistema de Simulación y Control para Atracción Mecánica</h3>
+                    <p class="text-sm font-medium text-amber-600 mt-1">Colaborativo con Arquitectura de Hardware</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Necesidad a Resolver</h4>
+                            <p class="text-gray-600 leading-relaxed">Se requiere un software central que actúe como un "gemelo digital", no solo simulando el comportamiento de una atracción, sino también controlando directamente el prototipo físico. El software debe enviar comandos que activen componentes mecánicos reales y su simulación gráfica debe reflejar el estado exacto del hardware en tiempo real.</p>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Entregables</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Diagrama de Clases UML:</strong> Diseño detallado de la arquitectura del software.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Código Fuente Completo:</strong> Implementación robusta aplicando todos los conceptos de POO.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>GUI Funcional:</strong> Panel de control visual para monitoreo y operación en tiempo real.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Módulo de Control Funcional:</strong> Capa de comunicación (API, Sockets, etc.) para interactuar con el hardware.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Video de Demostración Final:</strong> Prueba de la interacción exitosa entre software y hardware.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="project2" class="scroll-mt-24">
+                <div class="p-8 bg-white rounded-2xl shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-bold text-amber-800">Proyecto 2: CineManager - Sistema de Gestión Integral para Cines</h3>
+                     <p class="text-sm font-medium text-amber-600 mt-1">Aplicación de Escritorio</p>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Necesidad a Resolver</h4>
+                            <p class="text-gray-600 leading-relaxed">Los cines modernos necesitan un sistema digital centralizado para gestionar su operación: venta de boletos, administración de cartelera, gestión de salas y control de ventas de cafetería. El objetivo es optimizar la logística y mejorar la experiencia del cliente a través de una única plataforma.</p>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Entregables</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Diagrama de Clases UML:</strong> Modelado de las entidades del cine y sus relaciones.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Código Fuente Completo:</strong> Desarrollo de toda la lógica de negocio.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>GUI Funcional:</strong> Aplicación de escritorio con perfiles de Cliente y Administrador.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Persistencia de Datos:</strong> Simulación de base de datos usando archivos (JSON, XML).</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="project3" class="scroll-mt-24">
+                <div class="p-8 bg-white rounded-2xl shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-bold text-amber-800">Proyecto 3: StratoServe - Simulador de Arquitectura en la Nube</h3>
+                    <p class="text-sm font-medium text-amber-600 mt-1">Enfoque en Patrones de Diseño</p>
+                    
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Necesidad a Resolver</h4>
+                            <p class="text-gray-600 leading-relaxed">Para entender servicios como Google Drive, es necesario modelar su arquitectura de software. Se requiere un simulador que replique la lógica de gestión de usuarios, la estructura jerárquica de archivos/carpetas y los planes de suscripción con cuotas, enfocándose en la arquitectura y no en el almacenamiento físico de archivos.</p>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Entregables</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Diagrama de Clases UML:</strong> Diseño que evidencie el uso de patrones de diseño (ej. Composite, Strategy).</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Código Fuente Completo:</strong> Implementación del simulador.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>GUI Funcional:</strong> Interfaz para interactuar con el sistema de archivos virtual.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Documentación Técnica:</strong> Explicación de la implementación de los patrones de diseño.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="project4" class="scroll-mt-24">
+                <div class="p-8 bg-white rounded-2xl shadow-md border border-gray-100">
+                    <h3 class="text-2xl font-bold text-amber-800">Proyecto 4: TurnQuest - Motor para Juego de Rol (RPG) por Turnos</h3>
+                    <p class="text-sm font-medium text-amber-600 mt-1">Enfoque en Lógica de Juego</p>
+
+                    <div class="mt-6 grid grid-cols-1 md:grid-cols-5 gap-8">
+                        <div class="md:col-span-2">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Necesidad a Resolver</h4>
+                            <p class="text-gray-600 leading-relaxed">El corazón de un RPG es su motor, que gestiona reglas, estadísticas y habilidades. Se necesita construir el núcleo lógico de un juego, creando una arquitectura POO flexible y extensible para añadir fácilmente nuevos personajes, enemigos y objetos en el futuro, enfocándose en la reusabilidad y el polimorfismo.</p>
+                        </div>
+                        <div class="md:col-span-3">
+                            <h4 class="font-semibold text-lg text-gray-800 mb-2">Entregables</h4>
+                            <ul class="space-y-3">
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Diagrama de Clases UML:</strong> Diseño con jerarquías de herencia claras.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Código Fuente Completo:</strong> Implementación de todo el motor de juego.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>GUI Jugable y Funcional:</strong> Interfaz visual para crear un personaje y participar en un combate.</span></li>
+                                <li class="flex items-start"><span class="text-amber-600 mr-3 mt-1">➔</span><span class="text-gray-700"><strong>Pruebas Unitarias:</strong> Pruebas que demuestren el correcto funcionamiento de la lógica clave.</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="registration" class="scroll-mt-24">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-amber-800">Registro de Equipos</h2>
+                    <p class="mt-2 text-gray-600 max-w-2xl mx-auto">Una vez que hayas decidido qué proyecto realizar, utiliza el siguiente formulario para registrar a tu equipo. Recuerda que los equipos pueden ser de máximo 2 integrantes.</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl shadow-md border border-gray-100">
+                    <div class="max-w-4xl mx-auto">
+                         <iframe width="640px" height="480px" src="https://forms.office.com/Pages/ResponsePage.aspx?id=JLadtEYlWUK_NhmcbpiAMw7QgUAsyuFFm0p_vohqfb5UN0YyV1c3WkswWkhNT1ZBQjRaQkg5T0swWC4u&embed=true" frameborder="0" marginwidth="0" marginheight="0" style="border: none; width: 100%; height: 80vh;" allowfullscreen webkitallowfullscreen mozallowfullscreen msallowfullscreen> </iframe>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="text-center py-10 mt-16 border-t border-gray-200">
+            <p class="text-sm text-gray-500">Panel Interactivo de Proyectos Finales | Programación Orientada a Objetos</p>
+        </footer>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Navbar active state on scroll
+            const sections = document.querySelectorAll('section');
+            const navLinks = document.querySelectorAll('.nav-link');
+            const navbar = document.getElementById('navbar');
+            const navbarHeight = navbar.offsetHeight;
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.toggle('active', link.getAttribute('href').substring(1) === entry.target.id);
+                        });
+                    }
+                });
+            }, { rootMargin: `-${navbarHeight}px 0px 0px 0px`, threshold: 0.4 });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>
