@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POO: Herencia y Polimorfismo Interactivo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Academia Calm -->
+    <!-- Application Structure Plan: Se ha diseñado una SPA con navegación por pestañas (Inicio, Herencia, Polimorfismo, Diseño Avanzado, Comparativa) para permitir una exploración no lineal. Esta estructura es superior a un documento lineal porque permite a los usuarios saltar directamente a los conceptos de su interés y, fundamentalmente, comparar las implementaciones de Java y Python lado a lado mediante toggles interactivos. El objetivo es transformar un plan de clase pasivo en una herramienta de aprendizaje activa, donde la interacción (cambiar entre lenguajes, ver la gráfica comparativa) refuerza la comprensión de las diferencias y similitudes clave. -->
+    <!-- Visualization & Content Choices: 
+        - Report Info: Comparación de características de Herencia y Polimorfismo entre Java y Python. -> Goal: Comparar. -> Viz/Presentation Method: Gráfico de barras horizontales con Chart.js. -> Interaction: Visualización estática pero impactante que resume las diferencias cualitativas. -> Justification: Un gráfico es más digerible y memorable que una tabla de texto para una comparación de alto nivel. -> Library/Method: Chart.js (Canvas).
+        - Report Info: Ejemplos de código y explicaciones para cada lenguaje. -> Goal: Informar y Comparar. -> Viz/Presentation Method: Bloques de código y texto en un layout de dos columnas. -> Interaction: Botones de tipo toggle (Java/Python) que muestran/ocultan el contenido relevante usando JavaScript. -> Justification: Permite una comparación directa y enfocada sin salir de la sección, mejorando la retención del conocimiento. -> Library/Method: Vanilla JS (manipulación del DOM).
+        - Report Info: Principios de diseño (LSP, Composición). -> Goal: Organizar. -> Viz/Presentation Method: Tarjetas de contenido (cards) con HTML/Tailwind. -> Interaction: Ninguna, presentación clara y segmentada. -> Justification: Las tarjetas agrupan visualmente conceptos distintos pero relacionados, mejorando la legibilidad. -> Library/Method: HTML/Tailwind.
+    -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFBF8;
+            color: #3D352E;
+        }
+        .nav-link {
+            transition: all 0.3s ease;
+            border-bottom: 2px solid transparent;
+        }
+        .nav-link.active, .nav-link:hover {
+            color: #D35400;
+            border-bottom-color: #D35400;
+        }
+        .content-section {
+            display: none;
+        }
+        .content-section.active {
+            display: block;
+        }
+        .lang-toggle {
+            transition: all 0.3s ease;
+        }
+        .lang-toggle.active {
+            background-color: #D35400;
+            color: #FFFFFF;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 400px;
+            max-height: 50vh;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 500px;
+            }
+        }
+        pre {
+            background-color: #2D3748;
+            color: #F7FAFC;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-size: 0.875rem;
+        }
+        code {
+            font-family: 'Courier New', Courier, monospace;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header class="bg-white/80 backdrop-blur-lg sticky top-0 z-10 shadow-sm">
+        <nav class="container mx-auto px-6 py-4">
+            <ul class="flex items-center justify-center space-x-4 md:space-x-8 text-sm md:text-base font-medium">
+                <li><a href="#inicio" class="nav-link active">Inicio</a></li>
+                <li><a href="#herencia" class="nav-link">Herencia</a></li>
+                <li><a href="#polimorfismo" class="nav-link">Polimorfismo</a></li>
+                <li><a href="#diseno" class="nav-link">Diseño Avanzado</a></li>
+                <li><a href="#comparativa" class="nav-link">Comparativa Visual</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        
+        <section id="inicio" class="content-section active">
+            <div class="text-center max-w-3xl mx-auto">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Herencia y Polimorfismo</h1>
+                <p class="text-lg text-gray-600 mb-8">Una exploración interactiva de dos pilares de la Programación Orientada a Objetos, comparando sus implementaciones en Java y Python.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md max-w-4xl mx-auto">
+                <h2 class="text-2xl font-bold text-gray-800 mb-4">Introducción al Paradigma</h2>
+                <p class="text-gray-700 leading-relaxed">
+                    La Programación Orientada a Objetos (POO) modela problemas del mundo real a través de la interacción de objetos. Sus cuatro pilares fundamentales son la **abstracción, el encapsulamiento, la herencia y el polimorfismo**. Estos principios permiten crear sistemas de software robustos, flexibles y escalables.
+                    <br><br>
+                    Esta aplicación se centra en la **herencia** y el **polimorfismo**, dos conceptos que trabajan en conjunto para facilitar la reutilización y adaptabilidad del código. Exploraremos sus fundamentos, diferencias clave entre el tipado estático de Java y el tipado dinámico de Python, y su aplicación en la ingeniería de software moderna.
+                </p>
+            </div>
+        </section>
+
+        <section id="herencia" class="content-section">
+             <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Módulo 1: Herencia</h1>
+                <p class="text-lg text-gray-600">La herencia establece una relación "Es un" (`Is a`) entre clases, permitiendo que una clase hija herede atributos y métodos de una clase padre. Su objetivo principal es la reutilización de código y la creación de jerarquías lógicas.</p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Fundamentos de la Herencia</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        La herencia permite que una subclase (hija) adquiera las propiedades de una superclase (padre), pudiendo además añadir o modificar comportamientos. Por ejemplo, un `Pajaro` **es un** `Animal`, por lo que hereda características generales como `comer`, pero define su propio comportamiento específico como `volar`.
+                        <br><br>
+                        Este mecanismo centraliza el código común en la clase base, evitando la duplicación y facilitando el mantenimiento. A continuación, puedes explorar cómo se implementa este concepto en Java y Python.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Implementación Práctica</h3>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <button class="lang-toggle active px-4 py-2 rounded-md font-semibold border" data-lang="java" data-section="herencia">Java</button>
+                        <button class="lang-toggle px-4 py-2 rounded-md font-semibold border" data-lang="python" data-section="herencia">Python</button>
+                    </div>
+                    
+                    <div id="herencia-java" class="lang-content herencia">
+                        <p class="text-sm text-gray-600 mb-2">Java usa la palabra clave `extends`. No permite herencia múltiple de clases para evitar el "problema del diamante", pero sí de interfaces. Se utiliza `super()` para llamar al constructor padre.</p>
+                        <pre><code>// Clase Padre
+public class Animal {
+    protected String nombre;
+    
+    public Animal(String nombre) {
+        this.nombre = nombre;
+    }
+    
+    public void comer() {
+        System.out.println("El animal come.");
+    }
+}
+
+// Clase Hija
+public class Pajaro extends Animal {
+    public Pajaro(String nombre) {
+        super(nombre);
+    }
+    
+    @Override
+    public void comer() {
+        System.out.println("El pájaro come alpiste.");
+    }
+    
+    public void volar() {
+        System.out.println(this.nombre + " está volando.");
+    }
+}</code></pre>
+                    </div>
+                    
+                    <div id="herencia-python" class="lang-content herencia" style="display:none;">
+                        <p class="text-sm text-gray-600 mb-2">Python indica la herencia entre paréntesis. Sí soporta herencia múltiple, permitiendo combinar funcionalidades de varias clases. `super()` se invoca para acceder a los métodos del padre.</p>
+                        <pre><code># Clase Padre
+class Animal:
+    def __init__(self, nombre):
+        self.nombre = nombre
+
+    def comer(self):
+        print("El animal come.")
+
+# Clase Padre Adicional para Herencia Múltiple
+class Volador:
+    def volar(self):
+        print("Puede volar.")
+
+# Clase Hija con Herencia Múltiple
+class Pajaro(Animal, Volador):
+    def __init__(self, nombre):
+        super().__init__(nombre)
+
+    def comer(self):
+        print("El pájaro come alpiste.")
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="polimorfismo" class="content-section">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Módulo 2: Polimorfismo</h1>
+                <p class="text-lg text-gray-600">Del griego "muchas formas", el polimorfismo permite que objetos de diferentes clases respondan al mismo mensaje (llamada de método) de maneras específicas. Esto desacopla el código y lo hace más flexible.</p>
+            </div>
+             <div class="grid md:grid-cols-2 gap-8 items-start">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Abstracción del Comportamiento</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        El tipo de polimorfismo más común en POO es el de **inclusión o sobreescritura (overriding)**, donde una subclase redefine un método de su superclase. La máquina virtual o intérprete decide en tiempo de ejecución qué versión del método ejecutar, un proceso llamado **enlace dinámico**.
+                        <br><br>
+                        Esto permite escribir código genérico que opera sobre una clase base, pero que se comporta correctamente según el tipo real del objeto.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Polimorfismo en Acción</h3>
+                    <div class="flex justify-center space-x-2 mb-4">
+                        <button class="lang-toggle active px-4 py-2 rounded-md font-semibold border" data-lang="java" data-section="polimorfismo">Java</button>
+                        <button class="lang-toggle px-4 py-2 rounded-md font-semibold border" data-lang="python" data-section="polimorfismo">Python</button>
+                    </div>
+                    
+                    <div id="polimorfismo-java" class="lang-content polimorfismo">
+                        <p class="text-sm text-gray-600 mb-2">En Java (tipado estático), una variable de tipo padre puede referenciar a un objeto hijo. Al llamar a un método, se ejecuta la versión del hijo gracias al enlace dinámico.</p>
+                        <pre><code>Animal miAnimal = new Animal("Genérico");
+Animal miPajaro = new Pajaro("Piolín");
+
+// Polimorfismo en acción
+miAnimal.comer(); // Salida: El animal come.
+miPajaro.comer(); // Salida: El pájaro come alpiste.
+
+// No se puede llamar a volar() desde la referencia Animal
+// miPajaro.volar(); // Error de compilación
+</code></pre>
+                    </div>
+                    
+                    <div id="polimorfismo-python" class="lang-content polimorfismo" style="display:none;">
+                        <p class="text-sm text-gray-600 mb-2">Python (tipado dinámico) usa **Duck Typing**: "si camina como un pato y grazna como un pato, es un pato". No se requiere herencia; solo que los objetos tengan el método invocado.</p>
+                        <pre><code>class Pez:
+    def nadar(self):
+        print("El pez nada.")
+
+def realizar_accion(animal):
+    # No importa el tipo, solo el comportamiento
+    if hasattr(animal, 'volar'):
+        animal.volar()
+    if hasattr(animal, 'nadar'):
+        animal.nadar()
+
+pajaro = Pajaro("Canario")
+pez = Pez()
+
+realizar_accion(pajaro) # Salida: Puede volar.
+realizar_accion(pez)    # Salida: El pez nada.
+</code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="diseno" class="content-section">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Módulo 3: Diseño Avanzado</h1>
+                <p class="text-lg text-gray-600">El uso efectivo de la herencia y el polimorfismo va más allá de la sintaxis. Implica adherirse a principios de diseño que garantizan un software mantenible y robusto.</p>
+            </div>
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Principio de Sustitución de Liskov (LSP)</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        Este principio establece que los objetos de una clase derivada deben poder sustituir a los objetos de la clase base sin alterar la corrección del programa. Es la prueba de fuego para una buena jerarquía de herencia.
+                        <br><br>
+                        <strong>Ejemplo de violación (Cuadrado y Rectángulo):</strong> Si `Cuadrado` hereda de `Rectángulo`, al cambiar el ancho del cuadrado, también debería cambiar su alto, rompiendo el comportamiento esperado de un rectángulo genérico. Esto indica que la herencia no es la relación correcta aquí.
+                    </p>
+                </div>
+                <div class="bg-white p-8 rounded-xl shadow-md">
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4">Composición sobre Herencia</h2>
+                    <p class="text-gray-700 leading-relaxed">
+                        Es un principio de diseño que favorece la composición (un objeto "tiene un" otro objeto) sobre la herencia (un objeto "es un" otro).
+                        <br><br>
+                        La composición es más flexible, ya que las dependencias se pueden cambiar en tiempo de ejecución y reduce el acoplamiento entre clases. En lugar de que un `Coche` herede de `Motor`, un `Coche` **tiene un** `Motor`. Esto permite cambiar el motor sin afectar la clase `Coche`.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <section id="comparativa" class="content-section">
+            <div class="text-center max-w-3xl mx-auto mb-12">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Comparativa Visual: Java vs. Python</h1>
+                <p class="text-lg text-gray-600">Este gráfico resume las diferencias filosóficas y prácticas entre Java y Python en el contexto de la POO. Muestra cómo el tipado estático de Java promueve la seguridad en compilación, mientras que el tipado dinámico de Python favorece la flexibilidad y una menor verbosidad.</p>
+            </div>
+            <div class="bg-white p-8 rounded-xl shadow-md">
+                <div class="chart-container">
+                    <canvas id="comparisonChart"></canvas>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            const contentSections = document.querySelectorAll('.content-section');
+            const langToggles = document.querySelectorAll('.lang-toggle');
+
+            function updateActiveLink(targetId) {
+                navLinks.forEach(link => {
+                    link.classList.toggle('active', link.getAttribute('href') === `#${targetId}`);
+                });
+            }
+
+            function showSection(targetId) {
+                contentSections.forEach(section => {
+                    section.classList.toggle('active', section.id === targetId);
+                });
+                updateActiveLink(targetId);
+            }
+
+            navLinks.forEach(link => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href').substring(1);
+                    showSection(targetId);
+                });
+            });
+
+            langToggles.forEach(toggle => {
+                toggle.addEventListener('click', function () {
+                    const lang = this.dataset.lang;
+                    const section = this.dataset.section;
+                    
+                    document.querySelectorAll(`.lang-toggle[data-section="${section}"]`).forEach(t => t.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    document.querySelectorAll(`.lang-content.${section}`).forEach(content => {
+                        content.style.display = 'none';
+                    });
+                    
+                    document.getElementById(`${section}-${lang}`).style.display = 'block';
+                });
+            });
+            
+            const initialSection = window.location.hash ? window.location.hash.substring(1) : 'inicio';
+            showSection(initialSection);
+
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            const comparisonChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Seguridad en Compilación', 'Flexibilidad de Herencia', 'Verbosidad de Código', 'Curva de Aprendizaje POO', 'Polimorfismo (Flexibilidad)'],
+                    datasets: [{
+                        label: 'Java',
+                        data: [9, 4, 8, 7, 6],
+                        backgroundColor: 'rgba(211, 84, 0, 0.7)',
+                        borderColor: 'rgba(211, 84, 0, 1)',
+                        borderWidth: 1
+                    }, {
+                        label: 'Python',
+                        data: [3, 9, 3, 4, 9],
+                        backgroundColor: 'rgba(46, 134, 193, 0.7)',
+                        borderColor: 'rgba(46, 134, 193, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            max: 10,
+                            title: {
+                                display: true,
+                                text: 'Puntuación Relativa (1=Bajo, 10=Alto)'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Análisis Comparativo de Características POO',
+                            font: {
+                                size: 18
+                            }
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.dataset.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.parsed.x !== null) {
+                                        label += context.parsed.x;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
