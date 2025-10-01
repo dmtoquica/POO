@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clases Abstractas vs. Interfaces (Java y Python)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .code-block {
+            background-color: #1E293B; /* slate-800 */
+            color: #E2E8F0; /* slate-200 */
+            padding: 1rem;
+            border-radius: 0.5rem;
+            overflow-x: auto;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.875rem;
+        }
+        .code-block .comment { color: #94A3B8; } /* slate-400 */
+        .code-block .keyword { color: #F472B6; } /* pink-400 */
+        .code-block .class-name { color: #60A5FA; } /* blue-400 */
+        .code-block .method-name { color: #A78BFA; } /* violet-400 */
+        .code-block .string { color: #81C784; } /* light green */
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div class="container mx-auto p-4 sm:p-6 lg:p-8">
+        <header class="text-center mb-12">
+            <h1 class="text-4xl md:text-5xl font-bold text-gray-900">Clases Abstractas e Interfaces</h1>
+            <p class="mt-4 text-lg text-gray-600">Una guía sencilla con ejemplos en Java y Python.</p>
+        </header>
+
+        <main>
+            <!-- Sección de Clases Abstractas -->
+            <section id="abstract-classes" class="mb-16">
+                <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-bold mb-2 text-blue-600">1. Clases Abstractas</h2>
+                    <p class="text-gray-600 mb-6">Una clase abstracta es una "plantilla" para otras clases. No puedes crear un objeto directamente de ella, pero otras clases pueden heredarla. Es útil cuando quieres proporcionar una funcionalidad base que las clases hijas compartirán y obligarlas a implementar ciertos métodos.</p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                        <!-- Ejemplo Java -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Java</h3>
+                            <div class="code-block">
+<pre><code><span class="comment">// No se puede instanciar: new Figura() da error.</span>
+<span class="keyword">abstract class</span> <span class="class-name">Figura</span> {
+    <span class="comment">// Atributo que heredan las clases hijas.</span>
+    String color;
+
+    <span class="comment">// Método abstracto: sin implementación.</span>
+    <span class="comment">// Las clases hijas ESTÁN OBLIGADAS a implementarlo.</span>
+    <span class="keyword">abstract double</span> <span class="method-name">area</span>();
+
+    <span class="comment">// Método concreto: con implementación.</span>
+    <span class="comment">// Las clases hijas lo heredan tal cual.</span>
+    <span class="keyword">public void</span> <span class="method-name">mostrarColor</span>() {
+        System.out.println(<span class="string">"Color: "</span> + color);
+    }
+}
+
+<span class="keyword">class</span> <span class="class-name">Circulo</span> <span class="keyword">extends</span> <span class="class-name">Figura</span> {
+    <span class="keyword">double</span> radio;
+
+    <span class="comment">// Implementación obligatoria del método abstracto.</span>
+    @Override
+    <span class="keyword">public double</span> <span class="method-name">area</span>() {
+        <span class="keyword">return</span> Math.PI * radio * radio;
+    }
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Ejemplo Python -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Python</h3>
+                            <div class="code-block">
+<pre><code><span class="comment"># Python usa el módulo 'abc' (Abstract Base Classes)</span>
+<span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod
+
+<span class="comment"># Hereda de ABC para ser abstracta.</span>
+<span class="keyword">class</span> <span class="class-name">Figura</span>(ABC):
+    <span class="keyword">def</span> <span class="method-name">__init__</span>(self, color):
+        <span class="comment"># Atributo que heredan las clases hijas.</span>
+        self.color = color
+
+    <span class="comment"># Decorador para marcar el método como abstracto.</span>
+    @abstractmethod
+    <span class="keyword">def</span> <span class="method-name">area</span>(self):
+        <span class="keyword">pass</span>
+
+    <span class="comment"># Método concreto que heredan las hijas.</span>
+    <span class="keyword">def</span> <span class="method-name">mostrar_color</span>(self):
+        <span class="keyword">print</span>(f<span class="string">"Color: {self.color}"</span>)
+
+
+<span class="keyword">class</span> <span class="class-name">Circulo</span>(<span class="class-name">Figura</span>):
+    <span class="keyword">def</span> <span class="method-name">__init__</span>(self, color, radio):
+        super().<span class="method-name">__init__</span>(color)
+        self.radio = radio
+
+    <span class="comment"># Implementación obligatoria del método abstracto.</span>
+    <span class="keyword">def</span> <span class="method-name">area</span>(self):
+        <span class="keyword">import</span> math
+        <span class="keyword">return</span> math.pi * self.radio ** 2</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sección de Interfaces -->
+            <section id="interfaces" class="mb-16">
+                 <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-bold mb-2 text-green-600">2. Interfaces</h2>
+                    <p class="text-gray-600 mb-6">Una interfaz es un "contrato" que una clase puede firmar. Define un conjunto de métodos que la clase se compromete a implementar. Una interfaz solo dice <span class="font-semibold">QUÉ</span> debe hacer una clase, pero no <span class="font-semibold">CÓMO</span>. Son la base del polimorfismo y permiten que objetos muy diferentes compartan una misma capacidad.</p>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mt-6">
+                        <!-- Ejemplo Java -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Java</h3>
+                            <div class="code-block">
+<pre><code><span class="comment">// Una interfaz es un contrato 100% abstracto.</span>
+<span class="keyword">interface</span> <span class="class-name">Volador</span> {
+    <span class="comment">// Todos los métodos son públicos y abstractos por defecto.</span>
+    <span class="keyword">void</span> <span class="method-name">despegar</span>();
+    <span class="keyword">void</span> <span class="method-name">aterrizar</span>();
+}
+
+<span class="keyword">class</span> <span class="class-name">Avion</span> <span class="keyword">implements</span> <span class="class-name">Volador</span> {
+    <span class="comment">// Se obliga a implementar TODOS los métodos de la interfaz.</span>
+    @Override
+    <span class="keyword">public void</span> <span class="method-name">despegar</span>() {
+        System.out.println(<span class="string">"Avión despegando..."</span>);
+    }
+    @Override
+    <span class="keyword">public void</span> <span class="method-name">aterrizar</span>() {
+        System.out.println(<span class="string">"Avión aterrizando..."</span>);
+    }
+}
+
+<span class="keyword">class</span> <span class="class-name">Pajaro</span> <span class="keyword">implements</span> <span class="class-name">Volador</span> {
+    @Override
+    <span class="keyword">public void</span> <span class="method-name">despegar</span>() {
+        System.out.println(<span class="string">"Pájaro batiendo alas para despegar."</span>);
+    }
+    @Override
+    <span class="keyword">public void</span> <span class="method-name">aterrizar</span>() {
+        System.out.println(<span class="string">"Pájaro planeando para aterrizar."</span>);
+    }
+}</code></pre>
+                            </div>
+                        </div>
+
+                        <!-- Ejemplo Python -->
+                        <div>
+                            <h3 class="text-2xl font-semibold mb-4 text-center">Python</h3>
+                             <div class="code-block">
+<pre><code><span class="comment"># Python no tiene 'interfaces' como tal. Se logra el</span>
+<span class="comment"># mismo objetivo con Clases Base Abstractas (ABC).</span>
+<span class="comment"># La idea es crear un contrato 100% abstracto.</span>
+<span class="keyword">from</span> abc <span class="keyword">import</span> ABC, abstractmethod
+
+<span class="keyword">class</span> <span class="class-name">Volador</span>(ABC):
+    @abstractmethod
+    <span class="keyword">def</span> <span class="method-name">despegar</span>(self):
+        <span class="keyword">pass</span>
+
+    @abstractmethod
+    <span class="keyword">def</span> <span class="method-name">aterrizar</span>(self):
+        <span class="keyword">pass</span>
+
+<span class="keyword">class</span> <span class="class-name">Avion</span>(<span class="class-name">Volador</span>):
+    <span class="comment"># Se obliga a implementar TODOS los métodos abstractos.</span>
+    <span class="keyword">def</span> <span class="method-name">despegar</span>(self):
+        <span class="keyword">print</span>(<span class="string">"Avión despegando..."</span>)
+
+    <span class="keyword">def</span> <span class="method-name">aterrizar</span>(self):
+        <span class="keyword">print</span>(<span class="string">"Avión aterrizando..."</span>)
+
+<span class="keyword">class</span> <span class="class-name">Pajaro</span>(<span class="class-name">Volador</span>):
+    <span class="keyword">def</span> <span class="method-name">despegar</span>(self):
+        <span class="keyword">print</span>(<span class="string">"Pájaro batiendo alas para despegar."</span>)
+    
+    <span class="keyword">def</span> <span class="method-name">aterrizar</span>(self):
+        <span class="keyword">print</span>(<span class="string">"Pájaro planeando para aterrizar."</span>)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+            </section>
+            
+            <!-- Resumen de Diferencias -->
+            <section id="summary" class="mb-16">
+                <div class="bg-indigo-100 p-8 rounded-xl border-l-8 border-indigo-500">
+                    <h2 class="text-3xl font-bold mb-4 text-indigo-800">Diferencias Clave: Resumen Rápido</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-gray-700">
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2">Clase Abstracta</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li>Puede tener métodos <strong>abstractos y concretos</strong> (con código).</li>
+                                <li>Puede tener <strong>atributos/propiedades</strong> de instancia.</li>
+                                <li>Una clase solo puede <strong>heredar de UNA</strong> clase abstracta (herencia simple).</li>
+                                <li>Define una relación de tipo <strong class="text-indigo-600">"ES UN"</strong> (un Círculo <span class="italic">es una</span> Figura).</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h4 class="text-xl font-semibold mb-2">Interfaz</h4>
+                            <ul class="list-disc list-inside space-y-2">
+                                <li>Generalmente, solo define métodos <strong>abstractos</strong> (el contrato).</li>
+                                <li>No puede tener <strong>atributos</strong> de instancia (solo constantes).</li>
+                                <li>Una clase puede <strong>implementar MÚLTIPLES</strong> interfaces.</li>
+                                <li>Define una relación de tipo <strong class="text-indigo-600">"PUEDE HACER"</strong> (un Avión <span class="italic">puede</span> volar).</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+             <!-- Cuándo Usar Cada Uno -->
+            <section id="when-to-use">
+                 <div class="bg-white p-8 rounded-xl shadow-lg">
+                    <h2 class="text-3xl font-bold mb-4 text-gray-800">¿Cuándo usar cada uno?</h2>
+                    <div class="space-y-6">
+                        <div>
+                            <h3 class="text-xl font-semibold text-blue-600">Usa una Clase Abstracta si:</h3>
+                            <p class="text-gray-600 mt-1">Quieres compartir código (métodos concretos) o estado (atributos) entre varias clases que están estrechamente relacionadas. Por ejemplo, `Gato` y `Perro` podrían heredar de una clase abstracta `Animal` que ya implementa el método `dormir()`.</p>
+                        </div>
+                         <div>
+                            <h3 class="text-xl font-semibold text-green-600">Usa una Interfaz si:</h3>
+                            <p class="text-gray-600 mt-1">Necesitas que clases muy diferentes (y no relacionadas) tengan la misma capacidad o comportamiento. Por ejemplo, `Avion`, `Pajaro` y `Superman` podrían implementar la interfaz `Volador`, aunque no tengan nada más en común.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+        
+        <footer class="text-center mt-12 py-4 border-t">
+            <p class="text-gray-500">Creado para explicar la Programación Orientada a Objetos de forma sencilla.</p>
+        </footer>
+    </div>
+
+</body>
+</html>
