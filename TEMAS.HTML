@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guía Interactiva de Arquitectura de Software</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #111827; /* Dark background */
+            color: #d1d5db; /* Light gray text */
+        }
+        .section-card {
+            background-color: #1f2937;
+            border: 1px solid #374151;
+            border-radius: 0.75rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .code-block {
+            background-color: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            position: relative;
+            font-family: 'monospace';
+            font-size: 0.9em;
+            overflow-x: auto;
+        }
+        .code-block .copy-btn {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: #374151;
+            color: #d1d5db;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-size: 0.8em;
+            transition: background-color 0.2s;
+        }
+        .code-block .copy-btn:hover {
+            background-color: #4b5563;
+        }
+        .code-block .comment { color: #8b949e; }
+        .code-block .keyword { color: #ff7b72; }
+        .code-block .class-name { color: #d2a8ff; }
+        .code-block .function-name { color: #79c0ff; }
+        .code-block .string { color: #a5d6ff; }
+        .code-block .number { color: #ffab70; }
+        .highlight-bad { background-color: rgba(239, 68, 68, 0.1); border-left: 3px solid #ef4444; }
+        .highlight-good { background-color: rgba(34, 197, 94, 0.1); border-left: 3px solid #22c55e; }
+        
+        /* SOLID Tabs */
+        .tab-button {
+            transition: all 0.3s;
+            border-bottom: 3px solid transparent;
+        }
+        .tab-button.active {
+            color: #60a5fa; /* Light Blue */
+            border-bottom-color: #60a5fa;
+        }
+
+        /* MVC Diagram */
+        .mvc-box {
+            border: 2px solid #4b5563;
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+        .mvc-arrow {
+            position: relative;
+            color: #9ca3af;
+        }
+        .mvc-arrow::after {
+            content: '→';
+            position: absolute;
+            font-size: 2rem;
+            line-height: 1;
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Header -->
+    <header class="bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-700">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-white">Arquitectura de Software Avanzada</h1>
+            <div class="hidden md:flex space-x-6 text-lg">
+                <a href="#generics" class="text-gray-300 hover:text-blue-400 transition">Clases Genéricas</a>
+                <a href="#solid" class="text-gray-300 hover:text-blue-400 transition">Principios SOLID</a>
+                <a href="#mvc" class="text-gray-300 hover:text-blue-400 transition">Patrón MVC</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+
+        <!-- Section 1: Generic Classes -->
+        <section id="generics" class="section-card">
+            <h2 class="text-4xl font-black text-white mb-2">Clases Genéricas: El Poder de la Reutilización</h2>
+            <p class="text-lg text-gray-400 mb-8">Escribe código que funciona con cualquier tipo de dato, eliminando la duplicación y los errores. Es el principio "No te repitas" (DRY) en su máxima expresión.</p>
+
+            <h3 class="text-2xl font-bold text-blue-400 mb-4">El Problema: Código Repetitivo</h3>
+            <p class="mb-4">Imagina que necesitas guardar listas de diferentes objetos (Películas, Salas) en archivos JSON. Sin genéricos, terminarías con clases casi idénticas.</p>
+            <div class="grid md:grid-cols-2 gap-4 mb-8">
+                <div class="code-block highlight-bad">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <pre><code class="language-python"><span class="comment"># --- NO HACER ESTO ---</span>
+<span class="keyword">class</span> <span class="class-name">GestorDePeliculas</span>:
+    <span class="keyword">def</span> <span class="function-name">guardar</span>(<span class="keyword">self</span>, peliculas: list[Pelicula]):
+        <span class="comment"># Lógica para guardar películas...</span>
+        print(<span class="string">"Guardando películas..."</span>)
+
+</code></pre>
+                </div>
+                <div class="code-block highlight-bad">
+                    <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                    <pre><code class="language-python"><span class="comment"># --- CÓDIGO CASI IDÉNTICO ---</span>
+<span class="keyword">class</span> <span class="class-name">GestorDeSalas</span>:
+    <span class="keyword">def</span> <span class="function-name">guardar</span>(<span class="keyword">self</span>, salas: list[Sala]):
+        <span class="comment"># La misma lógica para guardar salas...</span>
+        print(<span class="string">"Guardando salas..."</span>)
+
+</code></pre>
+                </div>
+            </div>
+
+            <h3 class="text-2xl font-bold text-green-400 mb-4">La Solución: Una Clase Genérica</h3>
+            <p class="mb-4">Con `typing`, creamos una única clase `Repositorio` que actúa como una plantilla. Puede manejar cualquier tipo de objeto, siempre que siga un "contrato" (como tener un método `to_dict()`).</p>
+            <div class="code-block highlight-good mb-8">
+                <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+                <pre><code class="language-python"><span class="keyword">from</span> typing <span class="keyword">import</span> TypeVar, Generic, List
+
+T = TypeVar(<span class="string">'T'</span>) <span class="comment"># 1. Creamos una variable de tipo genérica</span>
+
+<span class="keyword">class</span> <span class="class-name">Repositorio</span>(Generic[T]): <span class="comment"># 2. La clase usa el tipo genérico</span>
+    <span class="keyword">def</span> <span class="function-name">guardar</span>(<span class="keyword">self</span>, elementos: List[T]):
+        print(f<span class="string">"Guardando {len(elementos)} elementos de tipo {T}...</span>")
+        <span class="comment"># ...lógica real para guardar en JSON...</span>
+
+<span class="comment"># 3. Se usa especificando el tipo deseado</span>
+repo_peliculas = Repositorio[Pelicula]()
+repo_salas = Repositorio[Sala]()
+</code></pre>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 class="text-xl font-bold text-white mb-4">¡Pruébalo!</h4>
+                <div class="flex items-center space-x-4">
+                    <select id="generic-type" class="bg-gray-700 border border-gray-600 rounded p-2 text-white">
+                        <option value="Pelicula">Pelicula</option>
+                        <option value="Sala">Sala</option>
+                        <option value="PersonajeRPG">PersonajeRPG</option>
+                    </select>
+                    <input id="generic-count" type="number" value="3" min="1" max="10" class="bg-gray-700 border border-gray-600 rounded p-2 text-white w-20">
+                    <button onclick="runGenericDemo()" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition">
+                        Ejecutar `guardar()`
+                    </button>
+                </div>
+                <div id="generic-output" class="mt-4 p-4 bg-gray-900 rounded font-mono text-green-400 h-12"></div>
+            </div>
+
+        </section>
+
+        <!-- Section 2: SOLID -->
+        <section id="solid" class="section-card">
+            <h2 class="text-4xl font-black text-white mb-2">Principios SOLID: Cimientos para un Código Robusto</h2>
+            <p class="text-lg text-gray-400 mb-8">Cinco reglas de diseño que, al seguirlas, hacen tu software más entendible, flexible y mantenible. Son la diferencia entre una choza y un rascacielos.</p>
+            
+            <div class="border-b border-gray-700 mb-6">
+                <nav class="-mb-px flex space-x-6" id="solid-tabs">
+                    <button class="tab-button active" data-target="srp">S: Responsabilidad Única</button>
+                    <button class="tab-button" data-target="ocp">O: Abierto/Cerrado</button>
+                    <button class="tab-button" data-target="lsp">L: Sustitución de Liskov</button>
+                    <button class="tab-button" data-target="isp">I: Segregación de Interfaces</button>
+                    <button class="tab-button" data-target="dip">D: Inversión de Dependencias</button>
+                </nav>
+            </div>
+
+            <div id="solid-content">
+                <!-- SRP -->
+                <div class="solid-panel" id="srp">
+                    <h3 class="text-2xl font-bold text-white mb-2">Una clase debe tener una, y solo una, razón para cambiar.</h3>
+                    <p class="mb-6 text-gray-400">Si una clase hace más de una cosa, se vuelve frágil. Cambiar una de sus responsabilidades puede romper la otra.</p>
+                    <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-bold text-red-400 mb-2">Anti-Patrón: La clase "sabelotodo"</h4>
+                            <div class="code-block highlight-bad">
+                                <pre><code><span class="keyword">class</span> <span class="class-name">Personaje</span>:
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(<span class="keyword">self</span>, nombre): ...
+    <span class="keyword">def</span> <span class="function-name">recibir_daño</span>(<span class="keyword">self</span>, cantidad): ...
+    
+    <span class="comment"># ¡VIOLACIÓN! El personaje no</span>
+    <span class="comment"># debería saber cómo dibujarse.</span>
+    <span class="keyword">def</span> <span class="function-name">dibujar_en_pantalla</span>(<span class="keyword">self</span>): ...</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-green-400 mb-2">Solución: Separar responsabilidades</h4>
+                            <div class="code-block highlight-good">
+                                <pre><code><span class="keyword">class</span> <span class="class-name">Personaje</span>:
+    <span class="comment"># Ahora solo gestiona datos</span>
+    <span class="keyword">def</span> <span class="function-name">__init__</span>(<span class="keyword">self</span>, nombre): ...
+    <span class="keyword">def</span> <span class="function-name">recibir_daño</span>(<span class="keyword">self</span>, cantidad): ...
+
+<span class="keyword">class</span> <span class="class-name">RenderizadorUI</span>:
+    <span class="comment"># Esta clase se dedica solo a dibujar</span>
+    <span class="keyword">def</span> <span class="function-name">dibujar</span>(<span class="keyword">self</span>, personaje: Personaje): ...</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- OCP -->
+                <div class="solid-panel hidden" id="ocp">
+                    <h3 class="text-2xl font-bold text-white mb-2">El software debe estar abierto para extensión, pero cerrado para modificación.</h3>
+                    <p class="mb-6 text-gray-400">Puedes añadir nueva funcionalidad sin cambiar el código existente que ya ha sido probado y funciona.</p>
+                     <div class="grid md:grid-cols-2 gap-4">
+                        <div>
+                            <h4 class="font-bold text-red-400 mb-2">Anti-Patrón: La cadena de `if/elif`</h4>
+                            <div class="code-block highlight-bad">
+                                <pre><code><span class="keyword">def</span> <span class="function-name">procesar_ataque</span>(atacante):
+    <span class="comment"># ¡VIOLACIÓN! Cada nuevo personaje</span>
+    <span class="comment"># obliga a modificar esta función.</span>
+    <span class="keyword">if</span> atacante.tipo == <span class="string">"Guerrero"</span>: ...
+    <span class="keyword">elif</span> atacante.tipo == <span class="string">"Mago"</span>: ...
+    <span class="keyword">elif</span> atacante.tipo == <span class="string">"Arquero"</span>: ...</code></pre>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-green-400 mb-2">Solución: Polimorfismo</h4>
+                            <div class="code-block highlight-good">
+                                <pre><code><span class="keyword">class</span> <span class="class-name">Personaje</span>:
+    <span class="keyword">def</span> <span class="function-name">atacar</span>(<span class="keyword">self</span>): <span class="keyword">raise</span> NotImplementedError
+
+<span class="keyword">class</span> <span class="class-name">Guerrero</span>(Personaje):
+    <span class="keyword">def</span> <span class="function-name">atacar</span>(<span class="keyword">self</span>): <span class="comment"># Ataca con espada</span>
+    
+<span class="keyword">class</span> <span class="class-name">Mago</span>(Personaje):
+    <span class="keyword">def</span> <span class="function-name">atacar</span>(<span class="keyword">self</span>): <span class="comment"># Lanza hechizo</span>
+
+<span class="keyword">def</span> <span class="function-name">procesar_ataque</span>(atacante: Personaje):
+    <span class="comment"># Esta función no cambia NUNCA.</span>
+    atacante.atacar()</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                 <!-- LSP, ISP, DIP panels -->
+                <div class="solid-panel hidden" id="lsp"><h3 class="text-2xl font-bold text-white">L: Principio de Sustitución de Liskov</h3><p class="text-gray-400">Los objetos de una clase derivada deben poder sustituir a los de la clase base sin romper la aplicación. Si `Pato` hereda de `Ave`, un `Pato` debe poder hacer todo lo que un `Ave` puede hacer.</p></div>
+                <div class="solid-panel hidden" id="isp"><h3 class="text-2xl font-bold text-white">I: Principio de Segregación de Interfaces</h3><p class="text-gray-400">Es mejor tener muchas interfaces pequeñas y específicas que una grande y general. No obligues a una clase a implementar métodos que no usa.</p></div>
+                <div class="solid-panel hidden" id="dip"><h3 class="text-2xl font-bold text-white">D: Principio de Inversión de Dependencias</h3><p class="text-gray-400">Las clases de alto nivel no deben depender de las de bajo nivel. Ambas deben depender de abstracciones (interfaces). Esto desacopla tu código y lo hace más flexible.</p></div>
+            </div>
+        </section>
+
+
+        <!-- Section 3: MVC -->
+        <section id="mvc" class="section-card">
+            <h2 class="text-4xl font-black text-white mb-2">Patrón MVC: Separa tu Lógica de tu Interfaz</h2>
+            <p class="text-lg text-gray-400 mb-8">Modelo-Vista-Controlador es una arquitectura que organiza tu código en tres capas interconectadas, evitando el "código espagueti" y facilitando las pruebas y la mantenibilidad.</p>
+
+            <div class="text-center mb-10">
+                <div class="grid grid-cols-5 items-center gap-4 max-w-4xl mx-auto">
+                    <div class="mvc-box bg-blue-900/50 border-blue-500">
+                        <h4 class="font-bold text-white text-xl">USUARIO</h4>
+                    </div>
+                    <div class="mvc-arrow"></div>
+                    <div class="mvc-box bg-green-900/50 border-green-500 col-span-3">
+                        <h4 class="font-bold text-white text-xl">VISTA</h4>
+                        <p class="text-sm text-gray-400">(La interfaz: botones, formularios)</p>
+                    </div>
+
+                    <div></div>
+                    <div class="text-2xl text-center transform -rotate-90 mvc-arrow"></div>
+                    <div></div>
+                    <div class="text-2xl text-center transform rotate-90 mvc-arrow"></div>
+                    <div></div>
+
+                    <div class="mvc-box bg-purple-900/50 border-purple-500 col-span-3 col-start-2">
+                         <h4 class="font-bold text-white text-xl">CONTROLADOR</h4>
+                         <p class="text-sm text-gray-400">(El intermediario, el "mesero")</p>
+                    </div>
+
+                    <div></div>
+                    <div class="text-2xl text-center transform -rotate-90 mvc-arrow"></div>
+                     <div></div>
+                    <div class="text-2xl text-center transform rotate-90 mvc-arrow"></div>
+                     <div></div>
+                    
+                    <div class="mvc-box bg-red-900/50 border-red-500 col-span-3 col-start-2">
+                        <h4 class="font-bold text-white text-xl">MODELO</h4>
+                        <p class="text-sm text-gray-400">(La lógica de negocio, los datos)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-gray-800 p-6 rounded-lg border border-gray-700">
+                <h4 class="text-xl font-bold text-white mb-4">Simulación Interactiva: Venta de Boletos de Cine</h4>
+                <p class="text-gray-400 mb-6">Observa cómo las tres capas colaboran sin mezclarse. Interactúa con la "Vista" y mira el "Log de Operaciones" para entender el flujo de datos.</p>
+                <div class="grid md:grid-cols-2 gap-8">
+                    <!-- Interfaz Simulada -->
+                    <div>
+                        <h5 class="text-lg font-bold text-green-400 mb-2">VISTA (Simulada)</h5>
+                        <div class="bg-gray-900 p-6 rounded-lg">
+                            <label for="asiento-input" class="block mb-2 font-medium text-gray-300">Número de Asiento:</label>
+                            <input type="text" id="asiento-input" value="A5" class="w-full bg-gray-700 border border-gray-600 rounded p-2 text-white mb-4">
+                            <button id="comprar-btn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded transition">Comprar Boleto</button>
+                            <div class="mt-4 text-center">
+                                <p class="text-gray-400">Estado:</p>
+                                <p id="estado-vista" class="font-bold text-lg text-white">Esperando acción...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Log de Operaciones -->
+                    <div>
+                        <h5 class="text-lg font-bold text-white mb-2">Log de Operaciones (Lo que pasa "detrás de cámaras")</h5>
+                        <div id="mvc-log" class="h-48 bg-gray-900 p-4 rounded font-mono text-sm overflow-y-auto text-gray-400 space-y-1">
+                            <div><span class="text-gray-500">...</span></div>
+                        </div>
+                         <button onclick="resetMvcDemo()" class="mt-2 text-sm text-blue-400 hover:underline">Reiniciar Simulación</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    <footer class="text-center py-8 text-gray-500">
+        <p>Material didáctico interactivo para la clase de Arquitectura de Software.</p>
+    </footer>
+
+    <script>
+        // --- Code Copy functionality ---
+        function copyCode(button) {
+            const pre = button.parentElement;
+            const code = pre.querySelector('code');
+            const text = code.innerText;
+            navigator.clipboard.writeText(text).then(() => {
+                button.textContent = '¡Copiado!';
+                setTimeout(() => {
+                    button.textContent = 'Copiar';
+                }, 2000);
+            });
+        }
+        
+        // --- Generics Demo ---
+        function runGenericDemo() {
+            const type = document.getElementById('generic-type').value;
+            const count = document.getElementById('generic-count').value;
+            const output = document.getElementById('generic-output');
+            output.textContent = `Ejecutando Repositorio[${type}].guardar()...`;
+            setTimeout(() => {
+               output.textContent = `> Guardando ${count} elementos de tipo ${type}...`;
+            }, 500);
+        }
+
+        // --- SOLID Tabs ---
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const solidPanels = document.querySelectorAll('.solid-panel');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                const targetId = button.getAttribute('data-target');
+                solidPanels.forEach(panel => {
+                    if (panel.id === targetId) {
+                        panel.classList.remove('hidden');
+                    } else {
+                        panel.classList.add('hidden');
+                    }
+                });
+            });
+        });
+
+        // --- MVC Demo ---
+        const mvcLog = document.getElementById('mvc-log');
+        const comprarBtn = document.getElementById('comprar-btn');
+        const asientoInput = document.getElementById('asiento-input');
+        const estadoVista = document.getElementById('estado-vista');
+
+        // Simulación del Modelo
+        const ModeloCine = {
+            asientosOcupados: new Set(),
+            venderBoleto: function(asiento) {
+                logToMvc("MODELO", `Recibida orden para vender asiento ${asiento}.`);
+                if (this.asientosOcupados.has(asiento)) {
+                    logToMvc("MODELO", `Error: El asiento ${asiento} ya está ocupado.`);
+                    return { success: false, message: "Asiento no disponible" };
+                }
+                this.asientosOcupados.add(asiento);
+                logToMvc("MODELO", `Éxito: Asiento ${asiento} marcado como ocupado.`);
+                return { success: true, message: `Boleto para ${asiento} vendido.` };
+            },
+            reset: function() {
+                this.asientosOcupados.clear();
+                logToMvc("SISTEMA", "Modelo reiniciado. Todos los asientos están libres.");
+            }
+        };
+
+        // Simulación del Controlador
+        const ControladorCine = {
+            handleCompra: function() {
+                const asiento = asientoInput.value.trim().toUpperCase();
+                if (!asiento) return;
+
+                logToMvc("CONTROLADOR", `Orden de la VISTA recibida para asiento ${asiento}.`);
+                logToMvc("CONTROLADOR", `Enviando comando al MODELO...`);
+
+                const resultado = ModeloCine.venderBoleto(asiento);
+                
+                logToMvc("CONTROLADOR", `Respuesta del MODELO recibida. Actualizando VISTA...`);
+                // Actualiza la Vista
+                estadoVista.textContent = resultado.message;
+                estadoVista.style.color = resultado.success ? '#22c55e' : '#ef4444';
+            }
+        };
+
+        comprarBtn.addEventListener('click', () => {
+            logToMvc("VISTA", `Usuario hizo clic en "Comprar Boleto".`);
+            ControladorCine.handleCompra();
+        });
+
+        function logToMvc(source, message) {
+            const p = document.createElement('p');
+            let color = 'text-gray-400';
+            if (source === "VISTA") color = 'text-green-400';
+            if (source === "CONTROLADOR") color = 'text-purple-400';
+            if (source === "MODELO") color = 'text-red-400';
+
+            p.innerHTML = `<span class="font-bold ${color}">${source}:</span> ${message}`;
+            mvcLog.appendChild(p);
+            mvcLog.scrollTop = mvcLog.scrollHeight; // Auto-scroll
+        }
+        
+        function resetMvcDemo() {
+            mvcLog.innerHTML = '<div><span class="text-gray-500">...</span></div>';
+            estadoVista.textContent = "Esperando acción...";
+            estadoVista.style.color = '#ffffff';
+            asientoInput.value = 'A5';
+            ModeloCine.reset();
+        }
+
+        // Initialize demos
+        resetMvcDemo();
+    </script>
+
+</body>
+</html>
